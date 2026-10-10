@@ -347,6 +347,7 @@ fun BridgeScreen(
     onSaveLanKey: (String) -> Unit,
     onCopyField: (String, String) -> Unit,
     onToggleStealth: (Boolean) -> Unit,
+    onToggleHideRecents: (Boolean) -> Unit,
     onDotColor: (Int) -> Unit,
     onDotSize: (Int) -> Unit,
     onDotShape: (DotShape) -> Unit,
@@ -604,6 +605,23 @@ fun BridgeScreen(
                             Switch(
                                 checked = state.stealthEnabled,
                                 onCheckedChange = onToggleStealth,
+                            )
+                        }
+
+                        HorizontalDivider()
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Column(Modifier.weight(1f)) {
+                                Text("隐藏后台卡片", style = MaterialTheme.typography.bodyMedium)
+                                Text(
+                                    "开启后应用不出现在多任务界面，无法再通过划掉卡片来关闭。",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                            Switch(
+                                checked = state.hideRecents,
+                                onCheckedChange = onToggleHideRecents,
                             )
                         }
 

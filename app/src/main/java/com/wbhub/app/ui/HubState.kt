@@ -67,6 +67,8 @@ data class HubState(
     val overlayLocked: Boolean = false,
     /** Whether the overlay is a non-interactive dot instead of the panel. */
     val stealthEnabled: Boolean = false,
+    /** Whether the app's card is kept out of the recents screen. */
+    val hideRecents: Boolean = false,
     val dotColor: Int = 0xFF34C759.toInt(),
     val dotSize: Int = 12,
     val dotShape: DotShape = DotShape.FILLED,
