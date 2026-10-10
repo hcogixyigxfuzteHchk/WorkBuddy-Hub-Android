@@ -29,6 +29,23 @@ object BridgeSettings {
     private const val KEY_BURN_IN_INTERVAL = "burn_in_interval_ms"
     private const val KEY_CALL_LIMIT = "call_log_limit"
     private const val KEY_PORT = "port"
+    private const val KEY_HIDE_RECENTS = "hide_recents"
+
+    /**
+     * Whether the app's card is kept out of the recents screen.
+     *
+     * Off by default: the card is how a user closes the app, and removing it
+     * takes that away. It is a setting rather than a manifest flag so the
+     * choice stays reversible without rebuilding.
+     */
+    fun hideRecents(context: Context): Boolean =
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .getBoolean(KEY_HIDE_RECENTS, false)
+
+    fun setHideRecents(context: Context, value: Boolean) {
+        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+            .edit().putBoolean(KEY_HIDE_RECENTS, value).apply()
+    }
 
     /**
      * Whether the panel is replaced by a small dot.
