@@ -404,10 +404,6 @@ class MainActivity : ComponentActivity() {
         // Storage access is granted on a system page, so the switch is only
         // accurate after coming back from it.
         agent = agent.copy(storageGranted = hasAllFilesAccess())
-        // The recents flag belongs to the task, which outlives any single
-        // activity instance but not a task that was cleared, so it is
-        // re-asserted on every return rather than set once at startup.
-        RecentsHider.apply(this, BridgeSettings.hideRecents(this))
     }
 
     /**
