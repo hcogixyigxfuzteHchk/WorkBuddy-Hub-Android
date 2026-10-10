@@ -23,6 +23,7 @@ import com.wbhub.app.bridge.LanAddresses
 import com.wbhub.app.bridge.CallLogStore
 import com.wbhub.app.bridge.CallRecord
 import com.wbhub.app.bridge.Notifications
+import com.wbhub.app.bridge.RecentsHider
 import com.wbhub.app.data.CheckinItem
 import com.wbhub.app.data.Login
 import com.wbhub.app.proto.AutoTaskRunner
@@ -139,6 +140,7 @@ class MainActivity : ComponentActivity() {
         agent = agent.copy(storageGranted = hasAllFilesAccess())
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         store = CredentialStore(this)
@@ -165,6 +167,7 @@ class MainActivity : ComponentActivity() {
             lanEnabled = lanOn,
             lanAddresses = if (lanOn) LanAddresses.current() else emptyList(),
             stealthEnabled = BridgeSettings.stealthEnabled(this),
+            hideRecents = BridgeSettings.hideRecents(this),
             dotColor = BridgeSettings.dotColor(this),
             dotSize = BridgeSettings.dotSize(this),
             dotShape = BridgeSettings.dotShape(this),
@@ -270,6 +273,11 @@ class MainActivity : ComponentActivity() {
                     // The window's touchability is fixed at add time, so the
                     // overlay rebuilds itself.
                     BridgeService.overlayRef?.stealthMode = enabled
+                },
+                onToggleHideRecents = { enabled ->
+                    BridgeSettings.setHideRecents(this, enabled)
+                    state = state.copy(hideRecents = enabled)
+                    RecentsHider.apply(this, enabled)
                 },
                 onDotColor = { color ->
                     BridgeSettings.setDotColor(this, color)
@@ -396,6 +404,10 @@ class MainActivity : ComponentActivity() {
         // Storage access is granted on a system page, so the switch is only
         // accurate after coming back from it.
         agent = agent.copy(storageGranted = hasAllFilesAccess())
+        // The recents flag belongs to the task, which outlives any single
+        // activity instance but not a task that was cleared, so it is
+        // re-asserted on every return rather than set once at startup.
+        RecentsHider.apply(this, BridgeSettings.hideRecents(this))
     }
 
     /**
